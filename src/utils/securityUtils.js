@@ -1,5 +1,4 @@
 const jwt = require("jsonwebtoken");
-const messages = require("@constants/messages");
 
 const generateToken = (tokenParams, expTime) => {
   const token = jwt.sign(tokenParams, process.env.SECRET_KEY, {
@@ -11,13 +10,15 @@ const generateToken = (tokenParams, expTime) => {
 const checkToken = (req, res) => {
 
   if (!req.headers.authorization) {
-    return res.status(400).send(messages.NO_AUTH);
+    throw new Error("NO_AUTH");
   }
 
   const [type, token] = req.headers.authorization.split(" ");
 
   if (type !== "Bearer" || !token) {
-    return res.status(401).send(messages.INVALID_TOKEN);
+    throw new Error("INVALID_TOKEN")
   }
+
+  return;
 }
 module.exports = { generateToken, checkToken }

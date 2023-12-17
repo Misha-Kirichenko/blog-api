@@ -5,7 +5,7 @@ const path = require('path');
 const ejs = require("ejs");
 const User = require("@models/User");
 const messages = require('@constants/messages');
-const { getDuplicateFieldMessage, getNotFoundMessage } = require('@utils/messageUtils');
+const messageUtils = require('@utils/messageUtils');
 const mailEventEmitter = require("@events/mailEventEmitter");
 const { generateToken } = require("@utils/securityUtils");
 
@@ -41,7 +41,7 @@ exports.registration = async (req, res) => {
   } catch (error) {
     await session.abortTransaction();
     if (error.code === 11000) {
-      return res.status(400).send(getDuplicateFieldMessage("User", error.keyPattern))
+      return res.status(400).send(messageUtils.getDuplicateFieldMsg("User", error.keyPattern))
     }
     return res.status(400).send(messages.UNCATEGORIZED_ERROR);
   }
@@ -124,7 +124,7 @@ exports.forgotPassword = async (req, res) => {
     const foundUser = await User.findOne({ email: req.body.email });
 
     if (!foundUser)
-      return res.status(404).send(getNotFoundMessage("User"));
+      return res.status(404).send(messageUtils.getNotFoundMessage("User"));
 
     if (foundUser.blocked)
       return res.status(403).send(messages.ACCOUNT_BLOCKED);
@@ -142,6 +142,7 @@ exports.forgotPassword = async (req, res) => {
     return res.status(400).send(messages.UNCATEGORIZED_ERROR);
   }
 }
+
 
 exports.resetPassword = async (req, res) => {
   try {

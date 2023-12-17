@@ -1,9 +1,9 @@
 module.exports = {
-  getSuccessMessage: (operation) => ({ message: `Operation ${operation} completed successfully` }),
-  getErrorMessage: (operation) => ({ message: `An error occurred during ${operation}` }),
-  getNotFoundMessage: (resource) => ({ message: `${resource} not found` }),
-  getDuplicateFieldMessage: (resource, keyPattern) => {
+  getSuccessmsg: (operation) => ({ msg: `${operation} completed successfully` }),
+  getErrormsg: (operation) => ({ msg: `An error occurred during ${operation}` }),
+  getNotFoundmsg: (resource) => ({ msg: `${resource} not found` }),
+  getDuplicateFieldMsg: (resource, keyPattern) => {
     const [key] = Object.keys(keyPattern);
-    return { message: `${resource} with same ${key} already exists` }
+    return { msg: `${resource} with same ${key} already exists` }
   }
 };

@@ -6,4 +6,5 @@ const mailEventEmitter = new MailEventEmitter();
 mailEventEmitter.on('sendSingleMail', async (mailSettings) => {
   await sendSingleMail(mailSettings);
 });
+
 module.exports = mailEventEmitter;

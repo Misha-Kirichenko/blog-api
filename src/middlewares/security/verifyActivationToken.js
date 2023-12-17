@@ -12,7 +12,7 @@ const verifyActivationToken = (req, res, next) => {
     return res.status(401).send(messages.INVALID_CREDENTIALS);
   }
 
-  if (decoded.type !== "activation") return res.status(400).send(INVALID_TOKEN);
+  if (decoded.type !== "activation") return res.status(400).send(messages.INVALID_TOKEN);
   req.activationData = { email: decoded.email };
 
   return next();

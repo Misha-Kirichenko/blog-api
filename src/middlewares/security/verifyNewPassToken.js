@@ -3,8 +3,14 @@ const messages = require("@constants/messages");
 const { checkToken } = require("@utils/securityUtils");
 
 const verifyNewPassToken = (req, res, next) => {
-  checkToken(req, res);
   let decoded;
+  try {
+    checkToken(req, res);
+  }
+  catch (error) {
+    return res.status(400).send(messages[error.message]);
+  }
+
   try {
     const [_, token] = req.headers.authorization.split(" ");
     decoded = jwt.verify(token, process.env.SECRET_KEY);
