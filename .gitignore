@@ -1,2 +1,10 @@
 .env
 /node_modules
+*.jpg
+*.jpeg
+*.png
+*.gif
+!assets/static/**/*.jpg
+!assets/static/**/*.jpeg
+!assets/static/**/*.png
+!assets/static/**/*.gif

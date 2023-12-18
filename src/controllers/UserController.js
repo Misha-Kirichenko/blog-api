@@ -1,3 +1,4 @@
+const fs = require('fs').promises;
 const { default: mongoose } = require("mongoose");
 const CONN = mongoose.connection;
 const bcrypt = require("bcrypt");
@@ -8,6 +9,7 @@ const messages = require('@constants/messages');
 const messageUtils = require('@utils/messageUtils');
 const mailEventEmitter = require("@events/mailEventEmitter");
 const { generateToken } = require("@utils/securityUtils");
+
 
 exports.registration = async (req, res) => {
   const session = await CONN.startSession();
@@ -99,7 +101,7 @@ exports.activate = async (req, res) => {
     const foundUser = await User.findOne({ email: req.activationData.email });
 
     if (!foundUser)
-      return res.status(404).send(getNotFoundMessage("User"));
+      return res.status(404).send(messageUtils.getNotFoundMessage("User"));
 
     if (foundUser.blocked)
       return res.status(403).send(messages.ACCOUNT_BLOCKED);
@@ -149,7 +151,7 @@ exports.resetPassword = async (req, res) => {
     const foundUser = await User.findOne({ email: req.newPassData.email });
 
     if (!foundUser)
-      return res.status(404).send(getNotFoundMessage("User"));
+      return res.status(404).send(messageUtils.getNotFoundMessage("User"));
 
     if (foundUser.blocked)
       return res.status(403).send(messages.ACCOUNT_BLOCKED);
@@ -169,4 +171,22 @@ exports.resetPassword = async (req, res) => {
   catch (_) {
     return res.status(400).send(messages.UNCATEGORIZED_ERROR);
   }
+}
+
+exports.updateAvatar = async (req, res) => {
+  try {
+    const updated = await User.findOneAndUpdate({ _id: req.user.id }, { avatar: req.fileDest })
+    if (updated) {
+      const previousAvatar = path.join(".", updated.avatar);
+      await fs.unlink(previousAvatar);
+    }
+    return res.send(messageUtils.getSuccessmsg("Updating avatar"));
+  }
+  catch (error) {
+    if (error.code === 'ENOENT' && syscall === "unlink") {
+      return res.send(messageUtils.getSuccessmsg("Updating avatar"));
+    }
+    return res.status(400).send(messages.UNCATEGORIZED_ERROR);
+  }
+
 }

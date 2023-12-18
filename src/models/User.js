@@ -9,7 +9,8 @@ const UserSchema = new mongoose.Schema(
     nickName: { type: String, unique: true },
     blocked: { type: Boolean, default: false },
     active: { type: Boolean, default: false },
-    role: { type: String, required: true, enum: ['USER', 'ADMIN', "MODER"], default: "USER" }
+    role: { type: String, required: true, enum: ['USER', 'ADMIN', "MODER"], default: "USER" },
+    avatar: { type: String, default: null }
   },
   { versionKey: false }
 );
