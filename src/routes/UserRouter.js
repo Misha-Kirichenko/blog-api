@@ -1,30 +1,34 @@
 const router = require("express").Router();
 const multer = require("multer");
 const UserController = require("@controllers/UserController");
-const { verifyActivationToken, verifyNewPassToken, verifyAuthToken } = require("@middlewares/security");
-const { registrationSchema, resetPasswordSchema } = require("@middlewares/schemas/user");
-const handleValidationErrors = require("@middlewares/handleValidationErrors");
+const { verifyAuthToken } = require("@middlewares/security");
 const { saveFile, fileFilter } = require("@utils/fileUtils");
 const fileUploadErrorHandler = require("@middlewares/fileUploadErrorHandler");
+const { changePasswordSchema, updateProfileSchema } = require("@middlewares/schemas/user");
+const handleValidationErrors = require("@middlewares/handleValidationErrors");
 const upload = multer({
   storage: saveFile('assets/uploads/avatars', "avatar"),
   fileFilter: fileFilter("image")
 });
 
-
-router.post("/login", UserController.login);
-router.post("/registration", [registrationSchema, handleValidationErrors], UserController.registration);
-router.patch("/activate", verifyActivationToken, UserController.activate);
-router.patch("/forgotPassword", UserController.forgotPassword);
-router.patch("/resetPassword",
+router.put("/updateAvatar", [verifyAuthToken, upload.single("avatar"), fileUploadErrorHandler], UserController.updateAvatar);
+router.delete("/deleteAvatar", [verifyAuthToken], UserController.deleteAvatar);
+router.patch("/changePassword",
   [
-    verifyNewPassToken,
-    resetPasswordSchema,
+    verifyAuthToken,
+    changePasswordSchema,
     handleValidationErrors
   ],
-  UserController.resetPassword);
+  UserController.changePassword
+);
 
-
-router.put("/updateAvatar", [verifyAuthToken, upload.single("avatar"), fileUploadErrorHandler], UserController.updateAvatar);
+router.patch("/updateProfile",
+  [
+    verifyAuthToken,
+    updateProfileSchema,
+    handleValidationErrors
+  ],
+  UserController.updateProfile
+);
 
 module.exports = router;

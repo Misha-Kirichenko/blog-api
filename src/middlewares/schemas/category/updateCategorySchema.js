@@ -1,4 +1,5 @@
 const { checkSchema } = require("express-validator");
+const { ALPHA_AND_SPACE } = require("@constants/regExps");
 
 const updateCategorySchema = checkSchema({
   name: {
@@ -10,7 +11,7 @@ const updateCategorySchema = checkSchema({
       errorMessage: 'category name should be at least 8 chars',
     },
     matches: {
-      options: /^[a-zA-Z\s]+$/,
+      options: ALPHA_AND_SPACE,
       errorMessage: 'category name can only contain latin alphabet and space',
     },
   },

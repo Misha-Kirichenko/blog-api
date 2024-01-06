@@ -1,4 +1,5 @@
 const { checkSchema } = require("express-validator");
+const { ALPHA_AND_SPACE, PASSWORD, NICKNAME } = require("@constants/regExps");
 
 const registrationSchema = checkSchema({
   name: {
@@ -9,7 +10,7 @@ const registrationSchema = checkSchema({
       errorMessage: 'name should be at least 8 chars',
     },
     matches: {
-      options: /^[a-zA-Z\s]+$/,
+      options: ALPHA_AND_SPACE,
       errorMessage: 'name can only contain latin alphabet and space',
     },
     exists: true,
@@ -22,10 +23,10 @@ const registrationSchema = checkSchema({
   nickName: {
     isLength: {
       options: { min: 5 },
-      errorMessage: 'name should be at least 8 chars',
+      errorMessage: 'nickname should be at least 5 chars',
     },
     matches: {
-      options: /^[a-zA-Z0-9_-]+$/,
+      options: NICKNAME,
       errorMessage: 'Nickname can only contain alphabet characters, numbers, hyphens, and underscores.',
     },
     exists: true,
@@ -36,7 +37,7 @@ const registrationSchema = checkSchema({
       errorMessage: 'Password should be at least 8 chars',
     },
     matches: {
-      options: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$/,
+      options: PASSWORD,
       errorMessage: 'Password must contain at least one digit, one uppercase letter, one lowercase letter and one special character.',
     },
     exists: true,

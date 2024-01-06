@@ -2,7 +2,6 @@ const { Category } = require("@models/Category");
 const messages = require('@constants/messages');
 const messageUtils = require('@utils/messageUtils');
 
-
 exports.getAll = async (req, res) => {
   try {
     const allCategories = await Category.find();

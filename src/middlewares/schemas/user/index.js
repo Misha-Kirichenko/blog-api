@@ -1,4 +1,4 @@
-const resetPasswordSchema = require("./resetPasswordSchema");
-const registrationSchema = require("./registrationSchema");
+const changePasswordSchema = require("./changePasswordSchema");
+const updateProfileSchema = require('./updateProfileSchema');
 
-module.exports = { resetPasswordSchema, registrationSchema };
+module.exports = { changePasswordSchema, updateProfileSchema };

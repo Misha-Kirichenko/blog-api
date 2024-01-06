@@ -33,7 +33,7 @@ const fileFilter = (type) => {
 
 const createFolders = (foldersArray) => {
   for (const dir of foldersArray) {
-    const directory = path.join(__dirname, '..', dir);
+    const directory = path.join(__dirname, '..', '..', dir);
     if (!fs.existsSync(directory)) {
       fs.mkdirSync(directory, { recursive: true });
     }
